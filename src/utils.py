@@ -1,4 +1,4 @@
-from typing import List, Any, Optional
+from typing import List, Dict, Any, Optional
 import os
 import sys
 import enum
@@ -160,7 +160,7 @@ def compile(cc: CompileCommand) -> str:
     return cc.output_name
 
 
-def run(executable: str):
+def run(executable: str, env: Optional[Dict[str, Any]] = None):
     p = subprocess.Popen(
         os.path.abspath(executable),
         stdin=subprocess.PIPE,
@@ -168,6 +168,7 @@ def run(executable: str):
         stderr=subprocess.PIPE,
         shell=False,
         text=True,
+        env={**os.environ, **(env or {})},
     )
     out, err = p.communicate()
     return p.returncode, out, err
