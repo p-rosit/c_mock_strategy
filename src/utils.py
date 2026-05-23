@@ -106,6 +106,7 @@ class CompileCommand:
     files: List[str]
     result: Result
     macros: List[Macro] = dataclasses.field(default_factory=list)
+    flags: List[str] = dataclasses.field(default_factory=list)
 
     def __post_init__(self):
         if temp_directory is None:
@@ -114,7 +115,8 @@ class CompileCommand:
             self.compiler,
             tuple(sorted(self.files)),
             self.result,
-            tuple(sorted([(m.name, m.value) for m in self.macros]))
+            tuple(sorted([(m.name, m.value) for m in self.macros])),
+            tuple(self.flags),
         ))
         self.output_name = os.path.join(temp_directory, self.result.name_with_file_ending(f'{self.compiler}_{id}'))
 
@@ -125,6 +127,7 @@ class CompileCommand:
         self.command += ' ' + self.result.as_flag(self.compiler)
         self.command += ' ' + self.result.output_flag(self.compiler, self.output_name)
         self.command += ' ' + ' '.join(m.as_flag(self.compiler) for m in self.macros)
+        self.command += ' ' + ' '.join(self.flags)
 
 
 class CompileError(Exception):
