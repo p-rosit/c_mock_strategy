@@ -23,6 +23,7 @@ def test_mock(compiler):
         compiler=compiler,
         files=[os.path.join('function_pointers', 'mock.c')],
         result=Result.object,
+        macros=[Macro(name='TEST_BUILD')],
     ))
 
     # Compile the final executable
@@ -30,7 +31,7 @@ def test_mock(compiler):
         compiler=compiler,
         files=[os.path.join('function_pointers', 'main.c'), os.path.join('function_pointers', 'dep.c'), mock],
         result=Result.executable,
-        macros=[Macro(name='main', value='real_main')],
+        macros=[Macro(name='main', value='real_main'), Macro(name='TEST_BUILD')],
     ))
 
     # Mocked behaviour

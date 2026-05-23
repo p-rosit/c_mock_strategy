@@ -3,7 +3,7 @@
 int external_func(int a);
 int internal_func(int a);
 
-struct DepVTable dep = {
+API_CONST struct DepVTable dep = {
     .external_func = external_func,
     .internal_func = internal_func,
 };
