@@ -2,6 +2,7 @@ from typing import List, Dict, Any, Optional
 import os
 import sys
 import enum
+import shlex
 import dataclasses
 import subprocess
 
@@ -16,9 +17,9 @@ class Macro:
 
     def as_flag(self, compiler: str) -> str:
         if compiler in ['gcc', 'clang', 'tcc']:
-            return f'-D{self.name}={self.value or ""}'
+            return shlex.quote(f'-D{self.name}={self.value or ""}')
         elif compiler in ['cl', 'clang-cl']:
-            return f'/D{self.name}={self.value or ""}'
+            return shlex.quote(f'/D{self.name}={self.value or ""}')
         raise NotImplementedError(f'Unknown compiler: "{compiler}"')
 
 
